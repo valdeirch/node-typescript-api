@@ -1,8 +1,7 @@
-import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
+import axios, { AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios';
 
 /* eslint-disable @typescript-eslint/no-empty-interface */
 export interface RequestConfig extends AxiosRequestConfig {}
-
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export interface Response<T = any> extends AxiosResponse<T> {}
 
@@ -13,8 +12,10 @@ export class Request {
     return this.request.get<T, Response<T>>(url, config);
   }
 
-  public static isRequestError(error: AxiosError): boolean {
-    return !!(error.response && error.response.status);
+  public static isRequestError(error: Error): boolean {
+    return !!(
+      (error as AxiosError).response && (error as AxiosError).response?.status
+    );
   }
 
   public static extractErrorData(
