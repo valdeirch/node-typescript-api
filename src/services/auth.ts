@@ -23,6 +23,8 @@ export default class AuthService {
   }
 
   public static generateToken(payload: object): string {
+    console.log(config.get('App.auth.key'));
+    console.log(config.get('App.auth.tokenExpiresIn'));
     return jwt.sign(payload, config.get('App.auth.key'), {
       expiresIn: config.get('App.auth.tokenExpiresIn'),
     });
