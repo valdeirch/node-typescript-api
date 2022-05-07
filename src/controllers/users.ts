@@ -13,7 +13,7 @@ export class UsersController extends BaseController {
       const newUser = await user.save();
       res.status(201).send(newUser);
     } catch (error: any) {
-      this.sendCretedUpdatedErrorResponse(res, error);
+      this.sendCretedUpdateErrorResponse(res, error);
     }
   }
 
@@ -25,13 +25,17 @@ export class UsersController extends BaseController {
     const { email, password } = req.body;
     const user = await User.findOne({ email });
     if (!user) {
-      return res.status(401).send({ code: 401, error: 'User not found' });
+      return this.sendErrorResponse(res, {
+        code: 401,
+        message: 'User not found',
+      });
     }
 
     if (!(await AuthService.comparePasswords(password, user.password))) {
-      return res
-        .status(401)
-        .send({ code: 401, error: 'Password does not match' });
+      return this.sendErrorResponse(res, {
+        code: 401,
+        message: 'Passwords do not match',
+      });
     }
 
     // Mandar JSON
